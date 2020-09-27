@@ -6,6 +6,9 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "image_algo_sse_cuda_cl", "image_algo_sse_cuda_cl\image_algo_sse_cuda_cl.vcxproj", "{43269E2E-CA74-485E-A886-B4CBD598F19F}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "image_algo_sse_cuda_cl_test", "image_algo_sse_cuda_cl_test\image_algo_sse_cuda_cl_test.vcxproj", "{BF3C6D6B-C1C3-45B9-B366-F01817256996}"
+	ProjectSection(ProjectDependencies) = postProject
+		{43269E2E-CA74-485E-A886-B4CBD598F19F} = {43269E2E-CA74-485E-A886-B4CBD598F19F}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
