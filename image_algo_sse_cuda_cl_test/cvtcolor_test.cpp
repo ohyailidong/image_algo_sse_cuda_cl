@@ -1,22 +1,9 @@
-#include<iostream>
+#include <iostream>
 #include <opencv2/world.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc.hpp>
-void RGB2YUV(unsigned char *RGB, unsigned char *dst, int Width, int Height, int channel) 
-{
-	for (int YY = 0; YY < Height; YY++) {
-		unsigned char *LinePS = RGB + YY * Width*channel;
-		unsigned char *LinePtrDst = dst + YY * Width*channel;
 
-		for (int XX = 0; XX < Width; XX++, LinePS += 3,LinePtrDst+=3)
-		{
-			int Blue = LinePS[0], Green = LinePS[1], Red = LinePS[2];
-			LinePtrDst[0] = int(0.299*Red + 0.587*Green + 0.144*Blue);
-			LinePtrDst[1] = int(-0.147*Red - 0.289*Green + 0.436*Blue);
-			LinePtrDst[2] = int(0.615*Red - 0.515*Green - 0.100*Blue);
-		}
-	}
-}
+#include "rgb2yuv.h"
 
 int main()
 {
@@ -28,15 +15,15 @@ int main()
 	unsigned char *Dest = new unsigned char[Height * Width * 3];
 
 	int64 st = cv::getTickCount();
-	//for (int i = 0; i < 1000; i++) {
-		RGB2YUV(Src, Dest, Width, Height, channel);
-	//}
-		cv::Mat dst(Height,Width,src.type(),Dest);
+	for (int i = 0; i < 1000; i++) {
+		cvLib::RGB2YUV(Src, Dest, Width, Height, channel);
+	}
+	cv::Mat dst(Height, Width, src.type(), Dest);
 
-		cv::Mat opencvdst;
-		cv::cvtColor(src, opencvdst, cv::COLOR_RGB2YUV);
+	cv::Mat opencvdst;
+	cv::cvtColor(src, opencvdst, cv::COLOR_RGB2YUV);
 	cv::imshow("origin", src);
-	cv::imshow("yuv", dst);
+	cv::imshow("myyuv", dst);
 	cv::imshow("opencvyuv", opencvdst);
 	cv::waitKey(0);
 	return 0;

@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="source">
+      <UniqueIdentifier>{cc69ce9d-17d7-4dbc-a781-b0e53e9ca02b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include">
+      <UniqueIdentifier>{febb92f1-4373-4d06-9ace-bb414ebd9430}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="kernel">
+      <UniqueIdentifier>{9b23139b-d97d-4b8d-9087-c5369b902c7a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\cvtcolor">
+      <UniqueIdentifier>{25b892bc-9ce8-47c4-b6d9-a95801545d4c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="kernel\cvtcolor">
+      <UniqueIdentifier>{f0f2d227-a03d-434f-ac20-9fd3c23f385d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\cvtcolor">
+      <UniqueIdentifier>{9689653d-784a-497e-a3c3-f99417130e81}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="rgb2yuv.cpp">
+      <Filter>source\cvtcolor</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="rgb2yuv.h">
+      <Filter>include\cvtcolor</Filter>
+    </ClInclude>
+    <ClInclude Include="common_define.h">
+      <Filter>include</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
