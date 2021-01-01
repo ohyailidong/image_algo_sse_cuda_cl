@@ -76,7 +76,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>E:\opencv4.0\opencv\build\include\opencv2;E:\opencv4.0\opencv\build\include;$(IncludePath);H:\image_algo_sse_cuda_cl\image_algo_sse_cuda_cl</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>E:\opencv4.0\opencv\build\include\opencv2;E:\opencv4.0\opencv\build\include;$(IncludePath);E:\image_algo_sse_cuda_cl\image_algo_sse_cuda_cl</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
@@ -114,7 +114,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>E:\opencv4.0\opencv\build\include\opencv2;E:\opencv4.0\opencv\build\include;$(IncludePath);H:\image_algo_sse_cuda_cl\image_algo_sse_cuda_cl</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>E:\opencv4.0\opencv\build\include\opencv2;E:\opencv4.0\opencv\build\include;$(IncludePath);E:\image_algo_sse_cuda_cl\image_algo_sse_cuda_cl</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -126,6 +126,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="cvtcolor_test.cpp" />
+    <ClCompile Include="main.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
