@@ -44,5 +44,8 @@
     <ClInclude Include="test_histogram.h">
       <Filter>头文件\TEST</Filter>
     </ClInclude>
+    <ClInclude Include="test_rgb2gray.h">
+      <Filter>头文件\TEST</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

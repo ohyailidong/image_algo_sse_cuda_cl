@@ -139,6 +139,7 @@
     <ClInclude Include="test_guidefilter.h" />
     <ClInclude Include="test_histogram.h" />
     <ClInclude Include="test_medianblur.h" />
+    <ClInclude Include="test_rgb2gray.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
