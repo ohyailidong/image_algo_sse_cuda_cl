@@ -137,6 +137,7 @@
     <ClInclude Include="test_boxfilter.h" />
     <ClInclude Include="test_common_define.h" />
     <ClInclude Include="test_guidefilter.h" />
+    <ClInclude Include="test_histogram.h" />
     <ClInclude Include="test_medianblur.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

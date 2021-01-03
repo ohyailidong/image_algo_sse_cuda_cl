@@ -2,6 +2,7 @@
 #include "test_boxfilter.h"
 #include "test_medianblur.h"
 #include "test_bilateralfilter.h"
+#include "test_histogram.h"
 int main()
 {
 	int*initcuda;
@@ -13,6 +14,7 @@ int main()
 	TEST_MEDIANBLUR_FILTER::Run();
 	TEST_BILATERAL_FILTER::Run();
 	TEST_GUASSIAN_FILTER::Run();
+	TEST_HISTOGRAM::Run();
 
 	cudaFree(initcuda);
 	system("pause");
