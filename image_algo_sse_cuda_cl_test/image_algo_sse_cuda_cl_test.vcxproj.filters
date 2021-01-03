@@ -18,9 +18,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="cvtcolor_test.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
@@ -31,6 +28,18 @@
   <ItemGroup>
     <ClInclude Include="test_common_define.h">
       <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="test_bilateralfilter.h">
+      <Filter>头文件\TEST</Filter>
+    </ClInclude>
+    <ClInclude Include="test_boxfilter.h">
+      <Filter>头文件\TEST</Filter>
+    </ClInclude>
+    <ClInclude Include="test_guidefilter.h">
+      <Filter>头文件\TEST</Filter>
+    </ClInclude>
+    <ClInclude Include="test_medianblur.h">
+      <Filter>头文件\TEST</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

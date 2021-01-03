@@ -11,18 +11,38 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="bilateralfilter.cpp" />
+    <ClCompile Include="boxfilter.cpp" />
     <ClCompile Include="common_define.cpp" />
     <ClCompile Include="guassianfilter.cpp" />
+    <ClCompile Include="guidefilter.cpp" />
+    <ClCompile Include="histogram.cpp" />
+    <ClCompile Include="medianblur.cpp" />
+    <ClCompile Include="rgb2gray.cpp" />
     <ClCompile Include="rgb2yuv.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="common_define.h" />
+    <ClInclude Include="bilateralfilter.h" />
+    <ClInclude Include="boxfilter.h" />
     <ClInclude Include="common_extern_c.h" />
     <ClInclude Include="guassianfilter.h" />
+    <ClInclude Include="guidefilter.h" />
+    <ClInclude Include="histogram.h" />
+    <ClInclude Include="medianblur.h" />
+    <ClInclude Include="rgb2gray.h" />
     <ClInclude Include="rgb2yuv.h" />
   </ItemGroup>
   <ItemGroup>
+    <CudaCompile Include="bilateralfilter.cu" />
+    <CudaCompile Include="boxfilter.cu" />
     <CudaCompile Include="guassianfilter.cu" />
+    <CudaCompile Include="histogram.cu" />
+    <CudaCompile Include="medianblur.cu">
+      <GenerateRelocatableDeviceCode Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</GenerateRelocatableDeviceCode>
+      <GenerateRelocatableDeviceCode Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</GenerateRelocatableDeviceCode>
+    </CudaCompile>
+    <CudaCompile Include="rgb2gray.cu" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{43269E2E-CA74-485E-A886-B4CBD598F19F}</ProjectGuid>
@@ -67,7 +87,7 @@
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
-      <AdditionalDependencies>cudart_static.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>cudart_static.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;cudadevrt.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
     </Link>
     <CudaCompile>
@@ -89,7 +109,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <SubSystem>Console</SubSystem>
-      <AdditionalDependencies>cudart_static.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>cudart_static.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;cudadevrt.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <CudaCompile>
       <TargetMachinePlatform>64</TargetMachinePlatform>

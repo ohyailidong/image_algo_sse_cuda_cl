@@ -10,7 +10,7 @@
 #include <iostream>
 #include <algorithm>
 #include <assert.h>
-
+#include <vector>
 #include "cuda_runtime.h"
 #include "device_launch_parameters.h"
 #include "device_functions.h"

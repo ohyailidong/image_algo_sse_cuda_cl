@@ -22,6 +22,12 @@
     <Filter Include="source\filter">
       <UniqueIdentifier>{813452d1-f4a8-48f6-a996-8bb9d29840b6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="include\histogram">
+      <UniqueIdentifier>{aa054fb9-1a12-4744-bf35-843ebc1d90dc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\histogram">
+      <UniqueIdentifier>{073c0294-659a-4e14-8fa4-551386fad973}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="rgb2yuv.cpp">
@@ -36,6 +42,24 @@
     <ClCompile Include="common_define.h">
       <Filter>include</Filter>
     </ClCompile>
+    <ClCompile Include="rgb2gray.cpp">
+      <Filter>source\cvtcolor</Filter>
+    </ClCompile>
+    <ClCompile Include="bilateralfilter.cpp">
+      <Filter>source\filter</Filter>
+    </ClCompile>
+    <ClCompile Include="boxfilter.cpp">
+      <Filter>source\filter</Filter>
+    </ClCompile>
+    <ClCompile Include="guidefilter.cpp">
+      <Filter>source\filter</Filter>
+    </ClCompile>
+    <ClCompile Include="medianblur.cpp">
+      <Filter>source\filter</Filter>
+    </ClCompile>
+    <ClCompile Include="histogram.cpp">
+      <Filter>source\histogram</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="rgb2yuv.h">
@@ -47,9 +71,42 @@
     <ClInclude Include="common_extern_c.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="rgb2gray.h">
+      <Filter>include\cvtcolor</Filter>
+    </ClInclude>
+    <ClInclude Include="bilateralfilter.h">
+      <Filter>include\filter</Filter>
+    </ClInclude>
+    <ClInclude Include="boxfilter.h">
+      <Filter>include\filter</Filter>
+    </ClInclude>
+    <ClInclude Include="guidefilter.h">
+      <Filter>include\filter</Filter>
+    </ClInclude>
+    <ClInclude Include="medianblur.h">
+      <Filter>include\filter</Filter>
+    </ClInclude>
+    <ClInclude Include="histogram.h">
+      <Filter>include\histogram</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CudaCompile Include="guassianfilter.cu">
+      <Filter>kernel</Filter>
+    </CudaCompile>
+    <CudaCompile Include="bilateralfilter.cu">
+      <Filter>kernel</Filter>
+    </CudaCompile>
+    <CudaCompile Include="boxfilter.cu">
+      <Filter>kernel</Filter>
+    </CudaCompile>
+    <CudaCompile Include="histogram.cu">
+      <Filter>kernel</Filter>
+    </CudaCompile>
+    <CudaCompile Include="medianblur.cu">
+      <Filter>kernel</Filter>
+    </CudaCompile>
+    <CudaCompile Include="rgb2gray.cu">
       <Filter>kernel</Filter>
     </CudaCompile>
   </ItemGroup>

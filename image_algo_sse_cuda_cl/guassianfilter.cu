@@ -1,4 +1,4 @@
-#include "common_extern_c.h"
+//#include "common_extern_c.h"
 #include "common_define.h"
 #define THREAD 32
 

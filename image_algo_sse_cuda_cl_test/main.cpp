@@ -1,5 +1,7 @@
 #include "test_guassianfilter.h"
-
+#include "test_boxfilter.h"
+#include "test_medianblur.h"
+#include "test_bilateralfilter.h"
 int main()
 {
 	int*initcuda;
@@ -7,6 +9,9 @@ int main()
 	cudaDeviceProp prop;
 	cudaGetDeviceProperties(&prop, 0);
 
+	TEST_BOX_FILTER::Run();
+	TEST_MEDIANBLUR_FILTER::Run();
+	TEST_BILATERAL_FILTER::Run();
 	TEST_GUASSIAN_FILTER::Run();
 
 	cudaFree(initcuda);
