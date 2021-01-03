@@ -1,6 +1,5 @@
 #ifndef RGB_2_YUV_H
 #define RGB_2_YUV_H
-
 #include "common_define.h"
 namespace cvLib {
 

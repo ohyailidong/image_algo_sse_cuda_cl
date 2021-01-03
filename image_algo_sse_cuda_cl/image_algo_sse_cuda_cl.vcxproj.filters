@@ -27,13 +27,30 @@
     <ClCompile Include="rgb2yuv.cpp">
       <Filter>source\cvtcolor</Filter>
     </ClCompile>
+    <ClCompile Include="guassianfilter.cpp">
+      <Filter>source\filter</Filter>
+    </ClCompile>
+    <ClCompile Include="common_define.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="common_define.h">
+      <Filter>include</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="rgb2yuv.h">
       <Filter>include\cvtcolor</Filter>
     </ClInclude>
-    <ClInclude Include="common_define.h">
+    <ClInclude Include="guassianfilter.h">
+      <Filter>include\filter</Filter>
+    </ClInclude>
+    <ClInclude Include="common_extern_c.h">
       <Filter>include</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CudaCompile Include="guassianfilter.cu">
+      <Filter>kernel</Filter>
+    </CudaCompile>
   </ItemGroup>
 </Project>

@@ -7,6 +7,20 @@
 #define EXPORT_IMAGE_ALGO_DLL
 #endif
 
+#include <iostream>
+#include <algorithm>
+#include <assert.h>
+
+#include "cuda_runtime.h"
+#include "device_launch_parameters.h"
+#include "device_functions.h"
+
+#define CVLIB_NAMESPACE_BEGIN namespace cvlib{
+#define CVLIB_NAMESPACE_END }
+#define CUDA_NAMESPACE_BEGIN namespace cuda{
+#define CUDA_NAMESPACE_END }
+#define MULTI_THREAD_NAMESPACE_BEGIN namespace mt{
+#define MULTI_THREAD_NAMESPACE_END }
 
 
 #endif
