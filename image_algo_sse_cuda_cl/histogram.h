@@ -1,7 +1,7 @@
 #ifndef HISTOGRAM_HIST_H
 #define HISTOGRAM_HIST_H
 
-#include "common_define.h"
+#include "common_define_cpu.h"
 #include "common_extern_c.h"
 
 CVLIB_NAMESPACE_BEGIN

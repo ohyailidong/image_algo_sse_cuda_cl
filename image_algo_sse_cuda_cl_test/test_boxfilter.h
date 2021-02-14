@@ -20,20 +20,15 @@ public:
 			<< "  ,channel= " << image.channels() << "\n";
 
 		cv::Mat dst(image.size(), image.type());
-
-		cv::Mat border;//上下左右边界扩充
-		cv::copyMakeBorder(image, border, ksize / 2, ksize / 2, ksize / 2, ksize / 2, cv::BORDER_DEFAULT);
 		
 		time.start(std::string("cpu计算总时间"));
 		//LOOP_100
-		cvlib::boxFilter(border.data, border.size().height, border.size().width, border.channels(), ksize,
-			dst.data, dst.size().height, dst.size().width);
+		cvlib::boxFilter(image.data, imagesize.height, imagesize.width, image.channels(), ksize, dst.data);
 		time.end();
 
 		time.start(std::string("gpu计算总时间"));
 		//LOOP_100
-		cvlib::cuda::boxFilter(border.data, border.size().height, border.size().width, border.channels(), ksize,
-			dst.data, dst.size().height, dst.size().width);
+		cvlib::cuda::boxFilter(image.data, image.size().height, image.size().width, image.channels(), ksize, dst.data);
 		time.end();
 
 		cv::Mat cvdst;

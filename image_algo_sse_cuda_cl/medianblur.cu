@@ -1,4 +1,4 @@
-#include "common_define.h"
+#include "common_define_gpu.h"
 
 #define THREAD 16
 

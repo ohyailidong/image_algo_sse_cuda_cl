@@ -1,26 +1,26 @@
 #include "guassianfilter.h"
 
 CVLIB_NAMESPACE_BEGIN
-int borderInterpolateDefault(int p, int len)
-{
-	int q = p;
-	if ((unsigned)q < (unsigned)len);
-
-	{
-		int delta = 1;
-		if (1 == len)
-			return 0;
-		do
-		{
-			if (q < 0)
-				q = -q - 1 + delta;
-			else
-				q = len - 1 - (q - len) - delta;
-		} while ((unsigned)q >= (unsigned)len);
-	}
-
-	return q;
-}
+//int borderInterpolateDefault(int p, int len)
+//{
+//	int q = p;
+//	if ((unsigned)q < (unsigned)len);
+//
+//	{
+//		int delta = 1;
+//		if (1 == len)
+//			return 0;
+//		do
+//		{
+//			if (q < 0)
+//				q = -q - 1 + delta;
+//			else
+//				q = len - 1 - (q - len) - delta;
+//		} while ((unsigned)q >= (unsigned)len);
+//	}
+//
+//	return q;
+//}
 
 void getGaussianKernel(const int ksize, const float &sigma, float* kernel)
 {
@@ -73,8 +73,7 @@ void RowFilter(unsigned char* src, const int height, const int width, const int 
 				float sum = 0;
 				for (k = -r; k <= r; k++)
 				{
-					int loc = borderInterpolateDefault(i + k, width);
-
+					int loc = cpu::borderInterpolateDefault(i + k, width);
 					int a = src[loc*channel + n];
 					float b = kx[k + r];
 					sum += src[loc*channel + n] * kx[k + r];
@@ -99,8 +98,7 @@ void ColomnFilter(unsigned char* src, const int height, const int width, const i
 				float sum = 0;
 				for (k = -r; k <= r; k++)
 				{
-					int loc = borderInterpolateDefault(j + k, height);
-
+					int loc = cpu::borderInterpolateDefault(j + k, height);
 					int a = src[loc*step + i * channel + n];
 					float b = ky[k + r];
 					sum += src[loc*step + i * channel + n] * ky[k + r];

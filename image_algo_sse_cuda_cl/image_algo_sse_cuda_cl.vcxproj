@@ -13,7 +13,7 @@
   <ItemGroup>
     <ClCompile Include="bilateralfilter.cpp" />
     <ClCompile Include="boxfilter.cpp" />
-    <ClCompile Include="common_define.cpp" />
+    <ClCompile Include="common_define_cpu.cpp" />
     <ClCompile Include="guassianfilter.cpp" />
     <ClCompile Include="guidefilter.cpp" />
     <ClCompile Include="histogram.cpp" />
@@ -22,9 +22,10 @@
     <ClCompile Include="rgb2yuv.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="common_define.h" />
+    <ClCompile Include="common_define_cpu.h" />
     <ClInclude Include="bilateralfilter.h" />
     <ClInclude Include="boxfilter.h" />
+    <ClInclude Include="common_define_gpu.h" />
     <ClInclude Include="common_extern_c.h" />
     <ClInclude Include="guassianfilter.h" />
     <ClInclude Include="guidefilter.h" />
@@ -36,7 +37,10 @@
   <ItemGroup>
     <CudaCompile Include="bilateralfilter.cu" />
     <CudaCompile Include="boxfilter.cu" />
-    <CudaCompile Include="guassianfilter.cu" />
+    <CudaCompile Include="common_define_gpu.cu" />
+    <CudaCompile Include="guassianfilter.cu">
+      <CodeGeneration Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">compute_50,sm_50;compute_52,sm_52;compute_60,sm_60;compute_61,sm_61;compute_70,sm_70;compute_75,sm_75;%(CodeGeneration)</CodeGeneration>
+    </CudaCompile>
     <CudaCompile Include="histogram.cu" />
     <CudaCompile Include="medianblur.cu">
       <GenerateRelocatableDeviceCode Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</GenerateRelocatableDeviceCode>
@@ -92,8 +96,9 @@
     </Link>
     <CudaCompile>
       <TargetMachinePlatform>64</TargetMachinePlatform>
-      <CodeGeneration>compute_35,sm_35;compute_37,sm_37;compute_50,sm_50;compute_52,sm_52;compute_60,sm_60;compute_61,sm_61;compute_70,sm_70;compute_75,sm_75;%(CodeGeneration)</CodeGeneration>
+      <CodeGeneration>compute_50,sm_50;compute_52,sm_52;compute_60,sm_60;compute_61,sm_61;compute_70,sm_70;compute_75,sm_75;%(CodeGeneration)</CodeGeneration>
       <Runtime>MTd</Runtime>
+      <GenerateRelocatableDeviceCode>true</GenerateRelocatableDeviceCode>
     </CudaCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -113,7 +118,8 @@
     </Link>
     <CudaCompile>
       <TargetMachinePlatform>64</TargetMachinePlatform>
-      <CodeGeneration>compute_35,sm_35;compute_37,sm_37;compute_50,sm_50;compute_52,sm_52;compute_60,sm_60;compute_61,sm_61;compute_70,sm_70;compute_75,sm_75;%(CodeGeneration)</CodeGeneration>
+      <CodeGeneration>compute_50,sm_50;compute_52,sm_52;compute_60,sm_60;compute_61,sm_61;compute_70,sm_70;compute_75,sm_75</CodeGeneration>
+      <GenerateRelocatableDeviceCode>true</GenerateRelocatableDeviceCode>
     </CudaCompile>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -1,4 +1,4 @@
-#include "common_define.h"
+#include "common_define_gpu.h"
 #include "common_extern_c.h"
 
 #define THREAD 32

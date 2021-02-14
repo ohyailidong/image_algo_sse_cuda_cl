@@ -1,4 +1,4 @@
-#include "common_define.h"
+#include "common_define_cpu.h"
 
 #define RED_SCALE 4898
 #define GREEN_SCALE 9618

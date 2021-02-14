@@ -36,12 +36,6 @@
     <ClCompile Include="guassianfilter.cpp">
       <Filter>source\filter</Filter>
     </ClCompile>
-    <ClCompile Include="common_define.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="common_define.h">
-      <Filter>include</Filter>
-    </ClCompile>
     <ClCompile Include="rgb2gray.cpp">
       <Filter>source\cvtcolor</Filter>
     </ClCompile>
@@ -59,6 +53,12 @@
     </ClCompile>
     <ClCompile Include="histogram.cpp">
       <Filter>source\histogram</Filter>
+    </ClCompile>
+    <ClCompile Include="common_define_cpu.h">
+      <Filter>include</Filter>
+    </ClCompile>
+    <ClCompile Include="common_define_cpu.cpp">
+      <Filter>source</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -89,6 +89,9 @@
     <ClInclude Include="histogram.h">
       <Filter>include\histogram</Filter>
     </ClInclude>
+    <ClInclude Include="common_define_gpu.h">
+      <Filter>kernel</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CudaCompile Include="guassianfilter.cu">
@@ -107,6 +110,9 @@
       <Filter>kernel</Filter>
     </CudaCompile>
     <CudaCompile Include="rgb2gray.cu">
+      <Filter>kernel</Filter>
+    </CudaCompile>
+    <CudaCompile Include="common_define_gpu.cu">
       <Filter>kernel</Filter>
     </CudaCompile>
   </ItemGroup>

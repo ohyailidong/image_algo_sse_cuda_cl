@@ -1,28 +1,28 @@
 //#include "common_extern_c.h"
-#include "common_define.h"
+#include "common_define_gpu.h"
 #define THREAD 32
 
-__device__ int borderInterpolateDefault(int p, int len)
-{
-
-	int q = p;
-	if ((unsigned)q < (unsigned)len);
-
-	{
-		int delta = 1;
-		if (1 == len)
-			return 0;
-		do
-		{
-			if (q < 0)
-				q = -q - 1 + delta;
-			else
-				q = len - 1 - (q - len) - delta;
-		} while ((unsigned)q >= (unsigned)len);
-	}
-
-	return q;
-}
+//extern "C" __device__ int borderInterpolateDefault(int p, int len);
+//{
+//
+//	int q = p;
+//	if ((unsigned)q < (unsigned)len);
+//
+//	{
+//		int delta = 1;
+//		if (1 == len)
+//			return 0;
+//		do
+//		{
+//			if (q < 0)
+//				q = -q - 1 + delta;
+//			else
+//				q = len - 1 - (q - len) - delta;
+//		} while ((unsigned)q >= (unsigned)len);
+//	}
+//
+//	return q;
+//}
 
 __global__ void RowFilter_Kernel(unsigned char* devsrc, const int height, const int width, const int channel,
 	const int ksize, const float* kx, unsigned char* devdst)
@@ -36,7 +36,7 @@ __global__ void RowFilter_Kernel(unsigned char* devsrc, const int height, const 
 	float sum = 0;
 	for (k = -r; k <= r; k++)
 	{
-		int loc = borderInterpolateDefault(x + k, width);
+		int loc = device::borderInterpolateDefault(x + k, width);
 		sum += devsrc[y* step + loc * channel + z] * kx[k + r];
 	}
 	devdst[y* step + x * channel + z] = (int)sum;
@@ -54,7 +54,7 @@ __global__ void ColomnFilter_Kernel(unsigned char* devsrc, const int height, con
 	float sum = 0;
 	for (k = -r; k <= r; k++)
 	{
-		int loc = borderInterpolateDefault(y + k, height);
+		int loc = device::borderInterpolateDefault(y + k, height);
 		sum += devsrc[loc*step + x * channel + z] * ky[k + r];
 	}
 	devdst[y* step + x * channel + z] = (int)sum;

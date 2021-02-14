@@ -1,6 +1,6 @@
 #ifndef GUIDE_FILTER_H
 #define	GUIDE_FILTER_H
-#include "common_define.h"
+#include "common_define_cpu.h"
 
 CVLIB_NAMESPACE_BEGIN
 

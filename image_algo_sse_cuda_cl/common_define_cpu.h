@@ -22,5 +22,12 @@
 #define MULTI_THREAD_NAMESPACE_BEGIN namespace mt{
 #define MULTI_THREAD_NAMESPACE_END }
 
+#define CPU_FUN_NMAESPACE_BEGIN namespace cpu{
+#define CPU_FUN_NMAESPACE_END }
+
+CPU_FUN_NMAESPACE_BEGIN
+int borderInterpolateDefault(int p, int len);
+CPU_FUN_NMAESPACE_END
+
 
 #endif

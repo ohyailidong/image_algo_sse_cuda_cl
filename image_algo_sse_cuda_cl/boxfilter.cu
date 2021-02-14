@@ -1,4 +1,4 @@
-#include "common_define.h"
+#include "common_define_gpu.h"
 
 #define THREAD 64
 //注意：核函数传参不能用int& 等类型，只能用int.
@@ -88,51 +88,53 @@ __global__ void d_box_fliter_global_y(int* devsrc, const int srcheight, const in
 		devdst[dstloc] = sum;
 	}
 }
-__global__ void d_box_fliter_global_x_char(unsigned char* devsrc, const int srcheight, const int srcwidth, const int channel,
-	const int ksize, unsigned char* devdst, const int dstheight, const int dstwidth)
+__global__ void d_box_fliter_global_x_char(unsigned char* devsrc, const int height, const int width, const int channel,
+	const int ksize, unsigned char* devdst)
 {
 	int x = blockIdx.x*blockDim.x + threadIdx.x;
 	int y = blockIdx.y*blockDim.y + threadIdx.y;
 	int z = blockIdx.z;
-	int srcloc = y * srcwidth*channel + x * channel + z;
-	int dstloc = y * dstwidth*channel + x * channel + z;
+	int step = width * channel;
+	int loc = y * step + x * channel + z;
 	float scale = 1.0f / ksize;
 
-	if (x < dstwidth&& y < dstheight)
+	if (x < width&& y < height)
 	{
 		int sum = 0;
 #pragma unroll
-		for (int k = 0; k < ksize; k++)
+		for (int r = - ksize / 2; r <= ksize/2; r++)
 		{
-			sum += devsrc[srcloc + k * channel];
+			int index = device::borderInterpolateDefault(x + r, width);
+			sum += devsrc[y* step + index * channel +z];
 		}
-		devdst[dstloc] = int(sum*scale);
+		devdst[loc] = int(sum*scale);
 	}
 }
-__global__ void d_box_fliter_global_y_char(unsigned char* devsrc, const int srcheight, const int srcwidth, const int channel,
-	const int ksize, unsigned char* devdst, const int dstheight, const int dstwidth)
+__global__ void d_box_fliter_global_y_char(unsigned char* devsrc, const int height, const int width, const int channel,
+	const int ksize, unsigned char* devdst)
 {
 	int x = blockIdx.x*blockDim.x + threadIdx.x;
 	int y = blockIdx.y*blockDim.y + threadIdx.y;
 	int z = blockIdx.z;
-	int srcloc = y * srcwidth*channel + x * channel + z;
-	int dstloc = y * dstwidth*channel + x * channel + z;
+	int step = width*channel;
+	int dstloc = y * step + x * channel + z;
 	float scale = 1.0f / ksize;
 
-	if (x < dstwidth&& y < dstheight)
+	if (x < width&& y < height)
 	{
 		int sum = 0;
 #pragma unroll
-		for (int k = 0; k < ksize; k++)
+		for (int k = -ksize/2; k <= ksize/2; k++)
 		{
-			sum += devsrc[srcloc + k * srcwidth*channel];
+			int index = device::borderInterpolateDefault(y + k, height);
+			sum += devsrc[index* step + x*channel +z];
 		}
 		devdst[dstloc] = int(sum*scale);
 	}
 }
 
-extern "C" void boxfilterGPU(unsigned char* devsrc, const int& srcheight, const int& srcwidth, const int& channel,
-	const int& ksize, unsigned char* devdst, const int& dstheight, const int& dstwidth)
+extern "C" void boxfilterGPU(unsigned char* devsrc, const int& height, const int& width, const int& channel,
+	const int& ksize, unsigned char* devdst)
 {
 	//调试代码
 	//cv::Mat temp(srcheight, dstwidth, CV_8UC1); //代表int类型
@@ -174,13 +176,13 @@ extern "C" void boxfilterGPU(unsigned char* devsrc, const int& srcheight, const 
 
 	{//method 3
 		unsigned char* devtemp;
-		cudaMalloc(&devtemp, srcheight*dstwidth*channel * sizeof(unsigned char));
+		cudaMalloc(&devtemp, height*width*channel * sizeof(unsigned char));
 #define DEVIDE 32
 		dim3 dimblock(DEVIDE, DEVIDE);
-		dim3 dimgrid((srcwidth + DEVIDE - 1) / DEVIDE, (srcheight + DEVIDE - 1) / DEVIDE, channel);//grid的维度
+		dim3 dimgrid((width + DEVIDE - 1) / DEVIDE, (height + DEVIDE - 1) / DEVIDE, channel);//grid的维度
 
-		d_box_fliter_global_x_char << < dimgrid, dimblock >> > (devsrc, srcheight, srcwidth, channel, ksize, devtemp, srcheight, dstwidth);
-		d_box_fliter_global_y_char << < dimgrid, dimblock >> > (devtemp, dstheight, dstwidth, channel, ksize, devdst, dstheight, dstwidth);
+		d_box_fliter_global_x_char << < dimgrid, dimblock >> > (devsrc, height, width, channel, ksize, devtemp);
+		d_box_fliter_global_y_char << < dimgrid, dimblock >> > (devtemp, height, width, channel, ksize, devdst);
 		cudaFree(devtemp);
 	}
 }
