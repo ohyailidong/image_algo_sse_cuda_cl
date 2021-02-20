@@ -2,43 +2,53 @@
 
 #define HIST_SZ 256
 
+__global__ void calhist_kernel_v1(unsigned char* devimage, float* devhist,
+	const int length)
+{
+	__shared__ unsigned int temp[HIST_SZ];
+	temp[threadIdx.x] = 0;
+	__syncthreads();
+	int i = threadIdx.x + blockIdx.x* blockDim.x;
+	int offset = blockDim.x* gridDim.x;
+	while (i < length)
+	{
+		atomicAdd(&temp[devimage[i]], 1);
+		i += offset;
+	}
+	__syncthreads();
+	atomicAdd(&devhist[threadIdx.x], temp[threadIdx.x]);
+}
 __global__ void calhist_kernel(unsigned char* devimage, float* devhist,
 	const int height, const int width)
 {
-	int x = blockIdx.x* blockDim.x + threadIdx.x;
-	int y = blockIdx.y* blockDim.y + threadIdx.y;
-	unsigned int value = 0;
-	if (x < width&& y < height)
-	{
-		value = devimage[y*width + x];
-		atomicAdd(&(devhist[value]), 1);
-	}
-	__syncthreads();
-
-
-	///////////共享内存直接实现，竟然比上面的方法慢（？？？？？？？）/////////////////////////////////
-	//__shared__ float devhist_shared[HIST_SZ];
 	//int x = blockIdx.x* blockDim.x + threadIdx.x;
 	//int y = blockIdx.y* blockDim.y + threadIdx.y;
-	//int inner = threadIdx.y* blockDim.x + threadIdx.x;
-
-	//if (inner < HIST_SZ)//shared memory 必须得初始化
-	//{
-	//	devhist_shared[inner] = 0;
-	//}
-	//__syncthreads();
-
 	//unsigned int value = 0;
 	//if (x < width&& y < height)
 	//{
 	//	value = devimage[y*width + x];
-	//	atomicAdd(&(devhist_shared[value]),1);
+	//	atomicAdd(&(devhist[value]), 1);
 	//}
 	//__syncthreads();
-	//if (inner < HIST_SZ)
-	//{
-	//	atomicAdd(&(devhist[inner]), devhist_shared[inner]);
-	//}
+
+
+	///////////共享内存直接实现，竟然和上面的方法时间相似/////////////////////////////////
+	__shared__ float devhist_shared[HIST_SZ];
+	int x = blockIdx.x* blockDim.x + threadIdx.x;
+	int y = blockIdx.y* blockDim.y + threadIdx.y;
+	int inner = threadIdx.y* blockDim.x + threadIdx.x;
+
+	devhist_shared[inner] = 0;//shared memory 必须得初始化
+	__syncthreads();
+
+	unsigned int value = 0;
+	if (x < width&& y < height)
+	{
+		value = devimage[y*width + x];
+		atomicAdd(&(devhist_shared[value]),1);
+	}
+	__syncthreads();
+	atomicAdd(&(devhist[inner]), devhist_shared[inner]);
 }
 
 __global__ void calhist_ratio_kernel(float*devhist, int total, float* devhistratio)
@@ -49,14 +59,20 @@ __global__ void calhist_ratio_kernel(float*devhist, int total, float* devhistrat
 
 __global__ void sum_ratio_kernel(float* devhistratio, float *devsumratio)
 {
-	//该方式比cpu循环慢，先用cpu代替
-	if (threadIdx.x == 0)
+	for (size_t i = 0; i < HIST_SZ; i++)
 	{
-		for (size_t i = 0; i < HIST_SZ; i++)
-		{
-			if (0 == i) continue;
-			devsumratio[i] += devhistratio[i - 1];
-		}
+		if (0 == i) continue;
+		devsumratio[i] += devhistratio[i - 1];
+	}
+}
+__global__ void sum_ratio_kernel_v1(float* devhistratio, float *devsumratio)
+{
+	int index = threadIdx.x;
+	for (unsigned int stride = 1; stride <= threadIdx.x; stride *= 2) {
+		float in1 = devhistratio[threadIdx.x - stride];
+		__syncthreads();
+		devsumratio[threadIdx.x] += in1;
+		__syncthreads();
 	}
 }
 
@@ -83,24 +99,15 @@ extern "C" void equalizeHistGPU(unsigned char* devimage, float* devhist, unsigne
 #define THREAD 16
 	dim3 dimblock(THREAD, THREAD);//block的维度
 	dim3 dimgrid((width + THREAD - 1) / THREAD, (height + THREAD - 1) / THREAD);//grid的维度
-	//calulate histogram
-	calhist_kernel << < dimgrid, dimblock >> > (devimage, devhist, height, width);
-	float* devhistratio = devhist;
-	int total = height * width;
-	calhist_ratio_kernel << <1, HIST_SZ >> > (devhist, total, devhistratio);
-	//sum_ratio_kernel << <1, HIST_SZ >> > (devhistratio, devhistratio);
-	//将概率累加和在cpu上进行
-	float* hostSumRatio = new float[HIST_SZ];
-	cudaMemcpy(hostSumRatio, devhistratio, HIST_SZ * sizeof(float), cudaMemcpyDeviceToHost);
-	for (size_t i = 0; i < HIST_SZ; i++)
-	{
-		if (0 == i) continue;
-		hostSumRatio[i] += hostSumRatio[i - 1];
-	}
-	float* devSumRatio = devhistratio;
-	cudaMemcpy(devSumRatio, hostSumRatio, HIST_SZ * sizeof(float), cudaMemcpyHostToDevice);
-	cal_lut_kernel << <1, HIST_SZ >> > (devSumRatio, devlut);
-	cal_map_image << <dimgrid, dimblock >> > (devimage, devlut, devdst, height, width);
+	
+	//calhist_kernel << < dimgrid, dimblock >> > (devimage, devhist, height, width);//calulate histogram
+	calhist_kernel_v1 << < 32, HIST_SZ >> > (devimage, devhist, height* width);
 
-	delete[]hostSumRatio;
+	float* devhistratio = devhist;
+	calhist_ratio_kernel << <1, HIST_SZ >> > (devhist, height * width, devhistratio);
+	//sum_ratio_kernel << <1, 1 >> > (devhistratio, devhistratio);
+	sum_ratio_kernel_v1 << <1, HIST_SZ >> > (devhistratio, devhistratio);
+
+	cal_lut_kernel << <1, HIST_SZ >> > (devhistratio, devlut);
+	cal_map_image << <dimgrid, dimblock >> > (devimage, devlut, devdst, height, width);
 }

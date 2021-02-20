@@ -21,18 +21,18 @@ public:
 
 
 		time.start(std::string("cpu计算总时间"));
-		//LOOP_100
+		LOOP_100
 		cvlib::equalizeHist(image.data, dst.data, imagesize.height, imagesize.width);
 		time.end();
 
 		time.start(std::string("gpu计算总时间"));
-		//LOOP_100
+		LOOP_100
 		cvlib::cuda::equalizeHist(image.data, dst.data, imagesize.height, imagesize.width);
 		time.end();
 
 		cv::Mat cvdst;
 		time.start(std::string("opencv计算总时间"));
-		//LOOP_100
+		LOOP_100
 		cv::equalizeHist(image, cvdst);
 		time.end();
 
