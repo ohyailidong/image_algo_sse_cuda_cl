@@ -30,4 +30,12 @@ private:
 
 #define LOOP_100 for(int loop=0;loop<100;loop++)
 
+inline void Check(cv::Mat dst, cv::Mat cvdst)
+{
+	cv::Mat error = abs(cvdst - dst);
+	cv::threshold(error, error, 2, 255, cv::THRESH_TOZERO);// 最大会有一个像素的误差
+	error.convertTo(error, CV_32F);
+	double err = sum(error.mul(error))[0];
+	std::cout << "误差平方和 error：" << err << "\n";
+}
 #endif

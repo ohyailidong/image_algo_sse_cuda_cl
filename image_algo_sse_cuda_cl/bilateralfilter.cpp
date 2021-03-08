@@ -1,10 +1,18 @@
 #include "bilateralfilter.h"
+#include "common_data_define.h"
+#include "copymakeborder.h"
 
 CVLIB_NAMESPACE_BEGIN
-void bilateralFilter(unsigned char* src, const int srcheight, const int srcwidth, const int channel,
-	const int d, double sigmacolor, double sigmaspace,
-	unsigned char* dst, const int dstheight, const int dstwidth)
+void bilateralFilter(unsigned char* src, const int height, const int width, const int channel,
+	const int d, double sigmacolor, double sigmaspace, unsigned char* dst)
 {
+	//copyMakeborder
+	Image srcImage(width, height, channel, src);
+	int borderwidth = width + d - 1, borderheight = height + d - 1;
+	unsigned char* border = new unsigned char[borderwidth* borderheight *channel];
+	Image borderImage(borderwidth, borderheight, channel, border);
+	cvlib::copyMakeborder(&srcImage, &borderImage, d / 2, d / 2, d / 2, d / 2, BORDER_DEFAULT);
+
 	double guass_color_coff = -0.5 / (sigmacolor*sigmacolor);
 	double guass_space_coff = -0.5 / (sigmaspace*sigmaspace);
 	std::vector<float> colorweight(channel * 255);
@@ -25,17 +33,17 @@ void bilateralFilter(unsigned char* src, const int srcheight, const int srcwidth
 			if (r > radius)
 				continue;
 			spaceweight[maxk] = (float)std::exp(r*r* guass_space_coff);
-			spaceoffset[maxk++] = (int)i* srcwidth*channel + j * channel;
+			spaceoffset[maxk++] = (int)i* borderwidth*channel + j * channel;
 		}
 	}
 	//filter
-	for (j = 0; j < dstheight; j++)
+	for (j = 0; j < height; j++)
 	{
-		unsigned char* srcLine = src + srcwidth * channel * j;
-		unsigned char* dstLine = dst + dstwidth * channel * j;
-		for (i = 0; i < dstwidth; i++)
+		unsigned char* srcLine = border + borderwidth * channel * j;
+		unsigned char* dstLine = dst + width * channel * j;
+		for (i = 0; i < width; i++)
 		{
-			unsigned char* src_center = srcLine + srcwidth * channel* radius + (i + radius) * channel;
+			unsigned char* src_center = srcLine + borderwidth * channel* radius + (i + radius) * channel;
 			if (channel == 1)
 			{
 				float sum = 0, wsum = 0;
@@ -79,24 +87,20 @@ void bilateralFilter(unsigned char* src, const int srcheight, const int srcwidth
 			}
 		}
 	}
+	delete[]border;
 }
 
 CUDA_NAMESPACE_BEGIN
-void bilateralFilter(unsigned char* src, const int srcheight, const int srcwidth, const int channel,
-	const int d, double sigmacolor, double sigmaspace,
-	unsigned char* dst, const int dstheight, const int dstwidth)
+void bilateralFilter(unsigned char* src, const int height, const int width, const int channel,
+	const int d, double sigmacolor, double sigmaspace, unsigned char* dst)
 {
-	unsigned char* devsrc, *devdst;
-	int srcimagebyte = srcheight * srcwidth* channel * sizeof(unsigned char);
-	int dstimagebyte = dstheight * dstwidth*channel * sizeof(unsigned char);
+	unsigned char* devsrc;
+	int srcimagebyte = height * width* channel * sizeof(unsigned char);
 	cudaMalloc(&devsrc, srcimagebyte);
-	cudaMalloc(&devdst, dstimagebyte);
 	cudaMemcpy(devsrc, src, srcimagebyte, cudaMemcpyHostToDevice);
-	cudaMemcpy(devdst, dst, dstimagebyte, cudaMemcpyHostToDevice);
-	bilateralFilterGPU(devsrc, srcheight, srcwidth, channel, d, sigmacolor, sigmaspace, devdst, dstheight, dstwidth);
-	cudaMemcpy(dst, devdst, dstimagebyte, cudaMemcpyDeviceToHost);
+	bilateralFilterGPU(devsrc, height, width, channel, d, sigmacolor, sigmaspace, devsrc);
+	cudaMemcpy(dst, devsrc, srcimagebyte, cudaMemcpyDeviceToHost);
 	cudaFree(devsrc);
-	cudaFree(devdst);
 }
 
 CUDA_NAMESPACE_END

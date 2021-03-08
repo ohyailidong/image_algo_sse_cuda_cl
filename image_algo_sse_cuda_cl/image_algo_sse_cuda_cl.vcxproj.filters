@@ -60,6 +60,9 @@
     <ClCompile Include="common_define_cpu.cpp">
       <Filter>source</Filter>
     </ClCompile>
+    <ClCompile Include="copymakeborder.cpp">
+      <Filter>source\filter</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="rgb2yuv.h">
@@ -92,6 +95,12 @@
     <ClInclude Include="common_define_gpu.h">
       <Filter>kernel</Filter>
     </ClInclude>
+    <ClInclude Include="common_data_define.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="copymakeborder.h">
+      <Filter>include\filter</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CudaCompile Include="guassianfilter.cu">
@@ -113,6 +122,9 @@
       <Filter>kernel</Filter>
     </CudaCompile>
     <CudaCompile Include="common_define_gpu.cu">
+      <Filter>kernel</Filter>
+    </CudaCompile>
+    <CudaCompile Include="copymakeborder.cu">
       <Filter>kernel</Filter>
     </CudaCompile>
   </ItemGroup>

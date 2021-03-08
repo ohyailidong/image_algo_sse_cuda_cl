@@ -14,6 +14,7 @@
     <ClCompile Include="bilateralfilter.cpp" />
     <ClCompile Include="boxfilter.cpp" />
     <ClCompile Include="common_define_cpu.cpp" />
+    <ClCompile Include="copymakeborder.cpp" />
     <ClCompile Include="guassianfilter.cpp" />
     <ClCompile Include="guidefilter.cpp" />
     <ClCompile Include="histogram.cpp" />
@@ -25,8 +26,10 @@
     <ClCompile Include="common_define_cpu.h" />
     <ClInclude Include="bilateralfilter.h" />
     <ClInclude Include="boxfilter.h" />
+    <ClInclude Include="common_data_define.h" />
     <ClInclude Include="common_define_gpu.h" />
     <ClInclude Include="common_extern_c.h" />
+    <ClInclude Include="copymakeborder.h" />
     <ClInclude Include="guassianfilter.h" />
     <ClInclude Include="guidefilter.h" />
     <ClInclude Include="histogram.h" />
@@ -38,6 +41,7 @@
     <CudaCompile Include="bilateralfilter.cu" />
     <CudaCompile Include="boxfilter.cu" />
     <CudaCompile Include="common_define_gpu.cu" />
+    <CudaCompile Include="copymakeborder.cu" />
     <CudaCompile Include="guassianfilter.cu">
       <CodeGeneration Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">compute_50,sm_50;compute_52,sm_52;compute_60,sm_60;compute_61,sm_61;compute_70,sm_70;compute_75,sm_75;%(CodeGeneration)</CodeGeneration>
     </CudaCompile>
@@ -87,12 +91,14 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;WIN64;_DEBUG;_CONSOLE;DLL_EXPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <AdditionalIncludeDirectories>E:\opencv4.0\opencv\build\include\opencv2;E:\opencv4.0\opencv\build\include;$(IncludePath);E:\image_algo_sse_cuda_cl\image_algo_sse_cuda_cl;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
-      <AdditionalDependencies>cudart_static.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;cudadevrt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opencv_world400d.lib;cudart_static.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;cudadevrt.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
+      <AdditionalLibraryDirectories>E:\opencv4.0\opencv\build\x64\vc15\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <CudaCompile>
       <TargetMachinePlatform>64</TargetMachinePlatform>

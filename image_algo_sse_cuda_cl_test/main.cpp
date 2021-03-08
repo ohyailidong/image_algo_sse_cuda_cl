@@ -3,6 +3,7 @@
 #include "test_medianblur.h"
 #include "test_bilateralfilter.h"
 #include "test_histogram.h"
+#include "test_copymakeborder.h"
 int main()
 {
 	int*initcuda;
@@ -10,6 +11,7 @@ int main()
 	cudaDeviceProp prop;
 	cudaGetDeviceProperties(&prop, 0);
 
+	TEST_COPYMAKEBORDER::Run();
 	TEST_BOX_FILTER::Run();
 	TEST_MEDIANBLUR_FILTER::Run();
 	TEST_BILATERAL_FILTER::Run();

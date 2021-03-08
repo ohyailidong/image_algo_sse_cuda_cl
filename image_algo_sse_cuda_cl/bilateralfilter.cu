@@ -1,6 +1,7 @@
 #include "common_define_gpu.h"
 #include "common_extern_c.h"
-
+#include "common_data_define.h"
+#include "copymakeborder.h"
 #define THREAD 32
 #define MAXCN 3
 #define MAXKERNEL 64
@@ -62,10 +63,18 @@ __global__ void filter_kernel_cn3(unsigned char* devsrc, const int srcheight, co
 	}
 }
 
-extern "C" void bilateralFilterGPU(unsigned char* devsrc, const int srcheight, const int srcwidth, const int channel,
-	const int d, double sigmacolor, double sigmaspace,
-	unsigned char* devdst, const int dstheight, const int dstwidth)
+extern "C" void bilateralFilterGPU(unsigned char* devsrc, const int height, const int width, const int channel,
+	const int d, double sigmacolor, double sigmaspace, unsigned char* devdst)
 {
+	//copyMakeborder
+	Image srcImage(width, height, channel, devsrc);
+	int borderwidth = width + d - 1, borderheight = height + d - 1;
+	unsigned char* devborder;
+	int borderbyte = borderwidth * borderheight* channel * sizeof(unsigned char);
+	cudaMalloc(&devborder, borderbyte);
+	Image borderImage(borderwidth, borderheight, channel, devborder);
+	cvlib::cuda::copyMakeborder(&srcImage, &borderImage, d / 2, d / 2, d / 2, d / 2, BORDER_DEFAULT);
+
 	float guass_color_coff = -0.5 / (sigmacolor*sigmacolor);
 	float guass_space_coff = -0.5 / (sigmaspace*sigmaspace);
 	std::vector<float> colorweight(channel * 255);
@@ -85,7 +94,7 @@ extern "C" void bilateralFilterGPU(unsigned char* devsrc, const int srcheight, c
 			if (r > radius)
 				continue;
 			spaceweight[maxk] = (float)std::exp(r*r* guass_space_coff);
-			spaceoffset[maxk++] = (int)i* srcwidth*channel + j * channel;
+			spaceoffset[maxk++] = (int)i* borderwidth*channel + j * channel;
 		}
 	}
 	cudaMemcpyToSymbol(dcolorweight, &colorweight[0], sizeof(float)*channel * 255, 0, cudaMemcpyHostToDevice);
@@ -93,11 +102,12 @@ extern "C" void bilateralFilterGPU(unsigned char* devsrc, const int srcheight, c
 	cudaMemcpyToSymbol(dspaceoffset, &spaceoffset[0], sizeof(int)*maxk, 0, cudaMemcpyHostToDevice);
 
 	dim3 block(THREAD, THREAD);
-	dim3 grid((dstwidth + block.x - 1) / block.x, (dstheight + block.y - 1) / block.y, channel);
+	dim3 grid((width + block.x - 1) / block.x, (height + block.y - 1) / block.y, channel);
 	if (channel == 1)
-		filter_kernel_cn1 << <grid, block >> > (devsrc, srcheight, srcwidth, channel, radius, maxk, devdst, dstheight, dstwidth);
+		filter_kernel_cn1 << <grid, block >> > (devborder, borderheight, borderwidth, channel, radius, maxk, devdst, height, width);
 	else if (channel == 3)
-		filter_kernel_cn3 << <grid, block >> > (devsrc, srcheight, srcwidth, channel, radius, maxk, devdst, dstheight, dstwidth);
+		filter_kernel_cn3 << <grid, block >> > (devborder, borderheight, borderwidth, channel, radius, maxk, devdst, height, width);
 	else
 		assert(false);
+	cudaFree(devborder);
 }
