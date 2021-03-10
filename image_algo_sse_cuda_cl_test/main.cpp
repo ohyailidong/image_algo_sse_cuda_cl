@@ -4,6 +4,7 @@
 #include "test_bilateralfilter.h"
 #include "test_histogram.h"
 #include "test_copymakeborder.h"
+#include "test_matchtemplate.h"
 int main()
 {
 	int*initcuda;
@@ -11,13 +12,13 @@ int main()
 	cudaDeviceProp prop;
 	cudaGetDeviceProperties(&prop, 0);
 
-	TEST_COPYMAKEBORDER::Run();
-	TEST_BOX_FILTER::Run();
-	TEST_MEDIANBLUR_FILTER::Run();
-	TEST_BILATERAL_FILTER::Run();
-	TEST_GUASSIAN_FILTER::Run();
-	TEST_HISTOGRAM::Run();
-
+	//TEST_COPYMAKEBORDER::Run();
+	//TEST_BOX_FILTER::Run();
+	//TEST_MEDIANBLUR_FILTER::Run();
+	//TEST_BILATERAL_FILTER::Run();
+	//TEST_GUASSIAN_FILTER::Run();
+	//TEST_HISTOGRAM::Run();
+	TEST_MATCH_TEMPLATE::Run();
 	cudaFree(initcuda);
 	system("pause");
 	return 0;

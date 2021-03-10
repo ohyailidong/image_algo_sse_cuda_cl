@@ -18,6 +18,7 @@
     <ClCompile Include="guassianfilter.cpp" />
     <ClCompile Include="guidefilter.cpp" />
     <ClCompile Include="histogram.cpp" />
+    <ClCompile Include="matchtemplate.cpp" />
     <ClCompile Include="medianblur.cpp" />
     <ClCompile Include="rgb2gray.cpp" />
     <ClCompile Include="rgb2yuv.cpp" />
@@ -33,9 +34,11 @@
     <ClInclude Include="guassianfilter.h" />
     <ClInclude Include="guidefilter.h" />
     <ClInclude Include="histogram.h" />
+    <ClInclude Include="matchtemplate.h" />
     <ClInclude Include="medianblur.h" />
     <ClInclude Include="rgb2gray.h" />
     <ClInclude Include="rgb2yuv.h" />
+    <ClInclude Include="common_time.h" />
   </ItemGroup>
   <ItemGroup>
     <CudaCompile Include="bilateralfilter.cu" />
@@ -114,13 +117,15 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;WIN64;NDEBUG;_CONSOLE;DLL_EXPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>E:\opencv4.0\opencv\build\include\opencv2;E:\opencv4.0\opencv\build\include;$(IncludePath);E:\image_algo_sse_cuda_cl\image_algo_sse_cuda_cl;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <SubSystem>Console</SubSystem>
-      <AdditionalDependencies>cudart_static.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;cudadevrt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opencv_world400.lib;cudart_static.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;cudadevrt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>E:\opencv4.0\opencv\build\x64\vc15\lib;%(AdditionalLibraryDirectories);$(CudaToolkitLibDir)</AdditionalLibraryDirectories>
     </Link>
     <CudaCompile>
       <TargetMachinePlatform>64</TargetMachinePlatform>

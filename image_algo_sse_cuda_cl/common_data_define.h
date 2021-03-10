@@ -6,12 +6,12 @@ struct Image
 	int width;
 	int height;
 	int channel;
-	void* ptr;
-	Image() {}
+	void* data;
+	Image() :width(0), height(0), channel(0), data(nullptr) {}
 	Image(int iwidth, int iheight, int ichannel, void* p) :width(iwidth),
 		height(iheight),
 		channel(ichannel),
-		ptr(p) {}
+		data(p) {}
 	~Image(){}
 };
 
@@ -26,6 +26,15 @@ enum BorderTypes {
 	BORDER_REFLECT101 = BORDER_REFLECT_101, //!< same as BORDER_REFLECT_101
 	BORDER_DEFAULT = BORDER_REFLECT_101, //!< same as BORDER_REFLECT_101
 	BORDER_ISOLATED = 16 //!< do not look outside of ROI
+};
+enum
+{
+	TM_SQDIFF = 0,
+	TM_SQDIFF_NORMED = 1,
+	TM_CCORR = 2,
+	TM_CCORR_NORMED = 3,
+	TM_CCOEFF = 4,
+	TM_CCOEFF_NORMED = 5
 };
 
 #endif

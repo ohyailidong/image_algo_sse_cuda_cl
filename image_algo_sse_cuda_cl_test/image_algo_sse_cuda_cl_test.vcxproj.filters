@@ -50,5 +50,8 @@
     <ClInclude Include="test_copymakeborder.h">
       <Filter>头文件\TEST</Filter>
     </ClInclude>
+    <ClInclude Include="test_matchtemplate.h">
+      <Filter>头文件\TEST</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

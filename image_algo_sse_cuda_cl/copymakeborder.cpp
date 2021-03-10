@@ -139,8 +139,8 @@ void copyMakeborder(void* srcImage, void* dstImage, int top, int bottom, int lef
 	int srcDim[3] = { channel,srcPtr->width,srcPtr->height };
 	int dstDim[3] = { channel,dstPtr->width,dstPtr->height };
 	int srcstep = srcPtr->width * channel, dststep = dstPtr->width * channel;
-	const unsigned char* ptrSrc = (const unsigned char*)srcPtr->ptr;
-	unsigned char* ptrDst = (unsigned char*)dstPtr->ptr;
+	const unsigned char* ptrSrc = (const unsigned char*)srcPtr->data;
+	unsigned char* ptrDst = (unsigned char*)dstPtr->data;
 	std::vector<unsigned char>value = { 0,0,0,0 };
 	if (bordertype != 0)
 	{
@@ -163,11 +163,11 @@ void copyMakeborder(void* srcImage, void* dstImage,	int top, int bottom, int lef
 	int dstimagesize = dstPtr->height * dstPtr->width*channel * sizeof(unsigned char);
 	cudaMalloc(&devsrc, srcimagesize);
 	cudaMalloc(&devdst, dstimagesize);
-	cudaMemcpy(devsrc, srcPtr->ptr, srcimagesize, cudaMemcpyHostToDevice);
+	cudaMemcpy(devsrc, srcPtr->data, srcimagesize, cudaMemcpyHostToDevice);
 	CopyMakeborderGPU(devsrc, srcPtr->height, srcPtr->width, channel,
 		devdst, dstPtr->height, dstPtr->width,
 		top, bottom, left, right, bordertype);
-	cudaMemcpy(dstPtr->ptr, devdst, dstimagesize, cudaMemcpyDeviceToHost);
+	cudaMemcpy(dstPtr->data, devdst, dstimagesize, cudaMemcpyDeviceToHost);
 	cudaFree(devsrc);
 	cudaFree(devdst);
 }

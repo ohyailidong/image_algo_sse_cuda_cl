@@ -63,6 +63,9 @@
     <ClCompile Include="copymakeborder.cpp">
       <Filter>source\filter</Filter>
     </ClCompile>
+    <ClCompile Include="matchtemplate.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="rgb2yuv.h">
@@ -100,6 +103,12 @@
     </ClInclude>
     <ClInclude Include="copymakeborder.h">
       <Filter>include\filter</Filter>
+    </ClInclude>
+    <ClInclude Include="common_time.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="matchtemplate.h">
+      <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
