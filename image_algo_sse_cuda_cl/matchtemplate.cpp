@@ -14,11 +14,11 @@ void matchTemplate(Image& src, Image& matchtemplate, Image& dst,
 	int srcrows = src.height, templrows = matchtemplate.height;
 	unsigned int corrcols = srcclos - templcols + 1;
 	unsigned int corrrows = srcrows - templrows + 1;
-	crossCorr(src, matchtemplate, dst, 0);//相关匹配法
+	crossCorr(src, matchtemplate, dst);//相关匹配法
 	common_matchTemplate(src, matchtemplate, dst, method, src.channel);
 }
 
-void crossCorr(const Image& img, const Image& templ, Image& corr, int borderType)
+void crossCorr(const Image& img, const Image& templ, Image& corr)
 {
 	//根据相关公式计算
 	int srccn = img.channel, templcn = templ.channel;
@@ -59,12 +59,12 @@ void common_matchTemplate(Image& img, Image& templ, Image& result, int method, i
 
 	float invArea = 1. / ((float)templ.height * templ.width);
 	int imgChannel = img.channel, imgCols = img.width, imgRows = img.height;
-	float *pSum = new float[imgChannel*(imgCols + 1)*(imgRows + 1)];
+	int *pSum = new int[imgChannel*(imgCols + 1)*(imgRows + 1)];
 	Image sum(imgCols + 1, imgRows + 1, imgChannel, pSum);
-	float *pSqSum = new float[imgChannel*(imgCols + 1)*(imgRows + 1)];
+	double *pSqSum = new double[imgChannel*(imgCols + 1)*(imgRows + 1)];
 	Image sqsum(imgCols + 1, imgRows + 1, imgChannel, pSqSum);
 	std::vector<float> templMean(4, 0), templSdv(4, 0);
-	float*q0 = 0, *q1 = 0, *q2 = 0, *q3 = 0;
+	double*q0 = 0, *q1 = 0, *q2 = 0, *q3 = 0;
 	float templNorm = 0, templSum2 = 0;
 
 	if (method == TM_CCOEFF)
@@ -109,16 +109,16 @@ void common_matchTemplate(Image& img, Image& templ, Image& result, int method, i
 		templNorm = std::sqrt(templNorm);
 		templNorm /= std::sqrt(invArea); // care of accuracy here
 
-		q0 = (float*)sqsum.data;
+		q0 = (double*)sqsum.data;
 		q1 = q0 + templ.width*cn;
-		q2 = (float*)((float*)sqsum.data + templ.height*sqsum.channel*sqsum.width);
+		q2 = (double*)((double*)sqsum.data + templ.height*sqsum.channel*sqsum.width);
 		q3 = q2 + templ.width*cn;
 	}
 
-	float* p0 = (float*)sum.data;
-	float* p1 = p0 + templ.width*cn;
-	float* p2 = (float*)((float*)sum.data + templ.height*sum.channel*sum.width);
-	float* p3 = p2 + templ.width*cn;
+	int* p0 = (int*)sum.data;
+	int* p1 = p0 + templ.width*cn;
+	int* p2 = (int*)((int*)sum.data + templ.height*sum.channel*sum.width);
+	int* p3 = p2 + templ.width*cn;
 
 	int sumstep = sum.channel*sum.width;
 	int sqstep = sqsum.channel*sqsum.width;
@@ -186,23 +186,26 @@ void common_matchTemplate(Image& img, Image& templ, Image& result, int method, i
 	delete[]pSqSum;
 }
 
-void integral(Image img, Image sum, Image sqsum)
+template <typename T, typename ST, typename QT>
+void integral_(Image& img, Image& sum, Image& sqsum)
 {
 	int cn = img.channel, width = img.width, height = img.height;
 	int imgstep, sumstep, sqsumstep;
 	imgstep = cn * width;
 	sumstep = sum.width *sum.channel;
-	bool sqsumEmpty = sqsum.width == 0;
+	bool sqsumEmpty = sqsum.data == nullptr;
 	if (!sqsumEmpty)
 		sqsumstep = sqsum.width*sqsum.channel;
 	width = img.width*img.channel;
-	unsigned char* imgPtr = (unsigned char*)img.data;
-	float* sumPtr = (float*)sum.data;
-	float* sqsumPtr = (float*)sqsum.data;
-
+	T* imgPtr = (T*)img.data;
+	ST* sumPtr = (ST*)sum.data;
+	QT* sqsumPtr = (QT*)sqsum.data;
+	memset(sumPtr, 0, sizeof(sumPtr[0])* (width + cn));
 	sumPtr += sumstep + cn;
-	if (!sqsumEmpty)
+	if (!sqsumEmpty) {
+		memset(sqsumPtr, 0, (width + cn) * sizeof(sqsumPtr[0]));
 		sqsumPtr += sqsumstep + cn;
+	}
 
 	int x, y, k;
 	if (sqsumEmpty)//only calculate sum
@@ -211,7 +214,7 @@ void integral(Image img, Image sum, Image sqsum)
 		{
 			for (k = 0; k < cn; k++, imgPtr++, sumPtr++)
 			{
-				float s = sumPtr[-cn] = 0;
+				ST s = sumPtr[-cn] = 0;
 				for (x = 0; x < width; x += cn)
 				{
 					s += imgPtr[x];
@@ -227,21 +230,24 @@ void integral(Image img, Image sum, Image sqsum)
 		{
 			for (k = 0; k < cn; k++, imgPtr++, sumPtr++, sqsumPtr++)
 			{
-				float s = sumPtr[-cn] = 0;
-				float sq = sqsumPtr[-cn] = 0;
+				ST s = sumPtr[-cn] = 0;
+				QT sq = sqsumPtr[-cn] = 0;
 				for (x = 0; x < width; x += cn)
 				{
-					unsigned char it = imgPtr[x];
+					T it = imgPtr[x];
 					s += it;
-					sq += (float)it*it;
-					float t = sumPtr[x - sumstep] + s;
-					float temp = sqsumPtr[x - sqsumstep];
-					float tq = sqsumPtr[x - sqsumstep] + sq;
+					sq += (QT)it*it;
+					ST t = sumPtr[x - sumstep] + s;
+					QT tq = sqsumPtr[x - sqsumstep] + sq;
 					sumPtr[x] = t;
 					sqsumPtr[x] = tq;
 				}
 			}
 		}
 	}
+}
+
+void integral(Image img, Image sum, Image sqsum) {
+	integral_<uchar, int, double>(img, sum, sqsum);
 }
 CVLIB_NAMESPACE_END

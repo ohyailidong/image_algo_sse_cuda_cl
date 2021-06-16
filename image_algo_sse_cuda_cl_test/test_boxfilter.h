@@ -10,39 +10,35 @@ class TEST_BOX_FILTER
 public:
 	static void Run()
 	{
-		std::cout << "TEST_BOX_FILTER: \n ";
+		SetSetConsoleTextColor(GREEN);
+		std::cout << "****************************TEST_BOX_FILTER:**************************** \n ";
+		SetSetConsoleTextColor(DEFAULT);
 
 		Time time;
 		int ksize = SIZE;//kernel size
 		cv::Mat image = cv::imread("../image/lena.jpg", 1);
 		auto imagesize = image.size();
-		std::cout << "height= " << imagesize.height << "  ,width= " << imagesize.width
-			<< "  ,channel= " << image.channels() << "\n";
-
-		cv::Mat dst(image.size(), image.type());
-		
-		time.start(std::string("cpu计算总时间"));
-		//LOOP_100
-		cvlib::boxFilter(image.data, imagesize.height, imagesize.width, image.channels(), ksize, dst.data);
-		time.end();
-
-		time.start(std::string("gpu计算总时间"));
-		//LOOP_100
-		cvlib::cuda::boxFilter(image.data, image.size().height, image.size().width, image.channels(), ksize, dst.data);
-		time.end();
+		DescriptionImage(image);
 
 		cv::Mat cvdst;
-		time.start(std::string("opencv计算总时间"));
+		time.start(platform_cv_time);
 		//LOOP_100
 		cv::boxFilter(image, cvdst, -1, cv::Size(SIZE, SIZE)/*,cv::Point(-1,-1),true*/);
 		time.end();
 
-		cv::Mat error = abs(cvdst - dst);
-		cv::threshold(error, error, 2, 255, cv::THRESH_TOZERO);// 最大会有一个像素的误差
-		error.convertTo(error, CV_32F);
+		cv::Mat matCpuDst(cvdst.size(), cvdst.type());
+		cv::Mat matGpuDst(cvdst.size(), cvdst.type());
 
-		double err = sum(error.mul(error))[0];
-		std::cout << "误差平方和 error：" << err << "\n";
+		time.start(platform_cpu_time);
+		cvlib::boxFilter(image.data, imagesize.height, imagesize.width, image.channels(), ksize, matCpuDst.data);
+		time.end();
+
+		time.start(platform_gpu_time);
+		cvlib::cuda::boxFilter(image.data, image.size().height, image.size().width, image.channels(), ksize, matGpuDst.data);
+		time.end();
+
+		Check(matCpuDst, cvdst, platform_cpu);
+		Check(matGpuDst, cvdst, platform_gpu);
 	}
 private:
 };

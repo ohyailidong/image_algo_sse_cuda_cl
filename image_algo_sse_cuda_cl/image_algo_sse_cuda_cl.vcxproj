@@ -20,6 +20,7 @@
     <ClCompile Include="histogram.cpp" />
     <ClCompile Include="matchtemplate.cpp" />
     <ClCompile Include="medianblur.cpp" />
+    <ClCompile Include="morphology.cpp" />
     <ClCompile Include="rgb2gray.cpp" />
     <ClCompile Include="rgb2yuv.cpp" />
   </ItemGroup>
@@ -36,6 +37,7 @@
     <ClInclude Include="histogram.h" />
     <ClInclude Include="matchtemplate.h" />
     <ClInclude Include="medianblur.h" />
+    <ClInclude Include="morphology.h" />
     <ClInclude Include="rgb2gray.h" />
     <ClInclude Include="rgb2yuv.h" />
     <ClInclude Include="common_time.h" />

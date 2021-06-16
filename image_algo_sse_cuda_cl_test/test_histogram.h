@@ -9,7 +9,9 @@ class TEST_HISTOGRAM
 public:
 	static void Run()
 	{
-		std::cout << "TEST_HISTOGRAM: \n ";
+		SetSetConsoleTextColor(GREEN);
+		std::cout << "****************************TEST_HISTOGRAM:**************************** \n ";
+		SetSetConsoleTextColor(DEFAULT);
 
 		Time time;
 		cv::Mat image = cv::imread("../image/lena.jpg", 0);

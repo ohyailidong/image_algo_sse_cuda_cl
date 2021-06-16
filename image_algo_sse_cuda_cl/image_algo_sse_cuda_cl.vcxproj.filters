@@ -28,6 +28,12 @@
     <Filter Include="source\histogram">
       <UniqueIdentifier>{073c0294-659a-4e14-8fa4-551386fad973}</UniqueIdentifier>
     </Filter>
+    <Filter Include="include\imgproc">
+      <UniqueIdentifier>{5ee44fb9-2ec2-4572-926e-9b9f1e400640}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\imgproc">
+      <UniqueIdentifier>{d63c2ed2-6c55-49c8-aa38-20a42ff2494c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="rgb2yuv.cpp">
@@ -64,7 +70,10 @@
       <Filter>source\filter</Filter>
     </ClCompile>
     <ClCompile Include="matchtemplate.cpp">
-      <Filter>source</Filter>
+      <Filter>source\imgproc</Filter>
+    </ClCompile>
+    <ClCompile Include="morphology.cpp">
+      <Filter>source\imgproc</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -107,8 +116,11 @@
     <ClInclude Include="common_time.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="morphology.h">
+      <Filter>include\imgproc</Filter>
+    </ClInclude>
     <ClInclude Include="matchtemplate.h">
-      <Filter>include</Filter>
+      <Filter>include\imgproc</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

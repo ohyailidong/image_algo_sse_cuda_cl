@@ -1,6 +1,12 @@
 #ifndef COMMON_DATA_DEFINE_H
 #define COMMON_DATA_DEFINE_H
 
+struct Point {
+	int x;
+	int y;
+	Point(int ix, int iy) { x = ix; y = iy; }
+	~Point(){}
+};
 struct Image
 {
 	int width;
@@ -13,6 +19,7 @@ struct Image
 		channel(ichannel),
 		data(p) {}
 	~Image(){}
+	int GetElementNum() { return width * height* channel; }
 };
 
 enum BorderTypes {
@@ -36,5 +43,20 @@ enum
 	TM_CCOEFF = 4,
 	TM_CCOEFF_NORMED = 5
 };
-
+enum MorphTypes {
+	MORPH_ERODE = 0, 
+	MORPH_DILATE = 1, 
+	MORPH_OPEN = 2, 
+	MORPH_CLOSE = 3, 
+	MORPH_GRADIENT = 4, //!< a morphological gradient
+	MORPH_TOPHAT = 5, //!< "top hat"
+	MORPH_BLACKHAT = 6, //!< "black hat"
+	MORPH_HITMISS = 7  //!< "hit or miss"
+};
+//! shape of the structuring element
+enum MorphShapes {
+	MORPH_RECT = 0, 
+	MORPH_CROSS = 1, 
+	MORPH_ELLIPSE = 2 
+};
 #endif

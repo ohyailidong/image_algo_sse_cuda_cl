@@ -12,7 +12,9 @@ class TEST_BILATERAL_FILTER
 public:
 	static void Run()
 	{
-		std::cout << "TEST_BILATERAL_FILTER: \n ";
+		SetSetConsoleTextColor(GREEN);
+		std::cout << "****************************TEST_BILATERAL_FILTER:**************************** \n ";
+		SetSetConsoleTextColor(DEFAULT);
 
 		Time time;
 		int ksize = SIZE;//kernel size
