@@ -21,6 +21,7 @@ int main()
 	TEST_INTEGRAL::Run();
 	TEST_MATCH_TEMPLATE::Run();
 	int a;
+	int b;
 	cudaFree(initcuda);
 	system("pause");
 	return 0;
