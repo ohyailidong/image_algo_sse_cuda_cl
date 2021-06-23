@@ -20,6 +20,7 @@ int main()
 	TEST_HISTOGRAM::Run();
 	TEST_INTEGRAL::Run();
 	TEST_MATCH_TEMPLATE::Run();
+	int a;
 	cudaFree(initcuda);
 	system("pause");
 	return 0;
