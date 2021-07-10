@@ -16,7 +16,7 @@ void copyMakeConstBorder_8u(const unsigned char*ptrsrc, size_t srcstep, int* src
 int borderInterpolate(int p, int len, int borderType);
 
 EXPORT_IMAGE_ALGO_DLL void copyMakeborder(void* srcImage, void* dstImage, 
-	int top, int bottom, int left, int right, int bordertype);
+	int top, int bottom, int left, int right, int bordertype, std::vector<unsigned char>value={0,0,0,0});
 
 CUDA_NAMESPACE_BEGIN
 EXPORT_IMAGE_ALGO_DLL void copyMakeborder(void* srcImage, void* dstImage,

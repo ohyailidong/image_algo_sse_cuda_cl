@@ -130,7 +130,7 @@ void copyMakeConstBorder_8u(const unsigned char*srcptr, size_t srcstep, int* src
 }
 
 
-void copyMakeborder(void* srcImage, void* dstImage, int top, int bottom, int left, int right, int bordertype)
+void copyMakeborder(void* srcImage, void* dstImage, int top, int bottom, int left, int right, int bordertype, std::vector<unsigned char>value)
 {
 	bordertype &= ~BORDER_ISOLATED;
 	Image* srcPtr = (Image*)srcImage;
@@ -141,7 +141,6 @@ void copyMakeborder(void* srcImage, void* dstImage, int top, int bottom, int lef
 	int srcstep = srcPtr->width * channel, dststep = dstPtr->width * channel;
 	const unsigned char* ptrSrc = (const unsigned char*)srcPtr->data;
 	unsigned char* ptrDst = (unsigned char*)dstPtr->data;
-	std::vector<unsigned char>value = { 0,0,0,0 };
 	if (bordertype != 0)
 	{
 		copyMakeBorder_8u(ptrSrc, srcstep, srcDim, ptrDst, dststep, dstDim, top, left, channel, bordertype);

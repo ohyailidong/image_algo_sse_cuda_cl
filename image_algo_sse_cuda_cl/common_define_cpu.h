@@ -23,9 +23,11 @@
 
 #define CPU_FUN_NMAESPACE_BEGIN namespace cpu{
 #define CPU_FUN_NMAESPACE_END }
+struct Image;
 
 CPU_FUN_NMAESPACE_BEGIN
 int borderInterpolateDefault(int p, int len);
+void ImageSub(Image& src1, Image& src2, Image& dst);
 CPU_FUN_NMAESPACE_END
 
 

@@ -5,6 +5,8 @@
 #include "test_histogram.h"
 #include "test_copymakeborder.h"
 #include "test_matchtemplate.h"
+
+
 int main()
 {
 	int*initcuda;
@@ -20,8 +22,7 @@ int main()
 	TEST_HISTOGRAM::Run();
 	TEST_INTEGRAL::Run();
 	TEST_MATCH_TEMPLATE::Run();
-	int a;
-	int b;
+	TEST_MORPHOLOGY::Run();
 	cudaFree(initcuda);
 	system("pause");
 	return 0;
